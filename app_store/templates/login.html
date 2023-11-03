@@ -1,0 +1,216 @@
+{% extends '_Master.html' %}
+{% block title_tab %}Đăng nhập{% endblock %}
+        
+{% block main_content %}
+    <!-- Breadcrumb Start -->
+    <div class="breadcrumb-wrap">
+        <div class="container-fluid">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Products</a></li>
+                <li class="breadcrumb-item active">Login & Register</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+    
+    <!-- Login Start -->
+    <div class="login">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">    
+                    <div class="register-form">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ chuoi_kq_dang_ky|safe }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Họ</label>
+                                    <input class="form-control" type="text" placeholder="Họ" name="ho">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Tên</label>
+                                    <input class="form-control" type="text" placeholder="Tên" name="ten">
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Email</label>
+                                    <input class="form-control" type="email" placeholder="Email" name="email">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Mật khẩu</label>
+                                    <input class="form-control" type="password" placeholder="Mật khẩu" name="mat_khau">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Xác nhận Mật khẩu</label>
+                                    <input class="form-control" type="password" placeholder="Xác nhận mật khẩu" name="xac_nhan_mat_khau">
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Điện thoại</label>
+                                    <input class="form-control" type="text" placeholder="Điện thoại" name="dien_thoai">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Tỉnh/Thành phố</label>
+                                    <select class="form-control" id="id_province" name = 'tinh_tp'>
+                                        
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Quận/Huyện</label>
+                                    <select class="form-control" id="id_district" name = 'quan_huyen'>
+                                        
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Phường/Xã</label>
+                                    <select class="form-control" id="id_ward" name = 'phuong_xa'>
+                                        
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Địa chỉ</label>
+                                    <textarea class="form-control" placeholder="Địa chỉ" rows="3" name="dia_chi"></textarea>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" name="btnDangKy" value="Đăng ký" class="btn">Đăng ký</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="login-form">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{ chuoi_kq_dang_nhap|safe }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Email</label>
+                                    <input class="form-control" type="email" placeholder="Email" name="email">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Mật khẩu</label>
+                                    <input class="form-control" type="password" placeholder="Mật khẩu" name="mat_khau">
+                                </div>
+                                <!--<div class="col-md-12">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="newaccount">
+                                        <label class="custom-control-label" for="newaccount">Keep me signed in</label>
+                                    </div>
+                                </div>-->
+                                <div class="col-md-12">
+                                    <button type="submit" name="btnDangNhap" value="Đăng nhập" class="btn">Đăng nhập</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Login End -->
+
+    <div class="col-md-4">
+                                    <label>Tỉnh/TP</label>
+                                    <select class="form-control" id="id_province" name="tinh_tp">
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Quận/Huyện</label>
+                                    <select class="form-control" id="id_district" name="quan_huyen">
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Phường/Xã</label>
+                                    <select class="form-control" id="id_ward" name="phuong_xa">
+                                    </select>
+                                </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Provinces
+            var province_arr = new Array{{ provinces|safe }};
+            $('#id_province').append($('<option>', {
+                    value: '0',
+                    text: 'Chọn Tỉnh/TP',
+                }, '</option>'));
+            $.each(province_arr, function (i, item) {
+                $('#id_province').append($('<option>', {
+                    value: item,
+                    text: item,
+                }, '</option>'));
+            });
+        });
+
+        // District
+        var districts = new Array{{ str_districts|safe }};
+        var d_a = new Array();
+        d_a[0] = 'Chọn Quận/Huyện';
+        {% for province in provinces %}
+            d_a['{{ province }}'] = districts[{{ forloop.counter0 }}];
+        {% endfor %}
+
+        // Ward
+        var wards = new Array{{ str_wards|safe }};
+        var w_a = new Array();
+        {{ data_str_wards|safe }}
+        {% for district in list_districts %}
+            w_a['{{ district }}'] = wards[{{ forloop.counter0 }}];
+        {% endfor %}
+
+        $('#id_province').change(function () {
+            var c = $(this).val();
+            var district_arr = d_a[c].split("|");
+            $('#id_district').empty();
+            $('#id_ward').empty();
+            if (c == '0') {
+                $('#id_district').append($('<option>', {
+                    value: '0',
+                    text: 'Chọn Quận/Huyện',
+                }, '</option>'));
+            } else {
+                $('#id_district').append($('<option>', {
+                    value: '0',
+                    text: 'Chọn Quận/Huyện',
+                }, '</option>'));
+                $.each(district_arr, function (i, item_district) {
+                    $('#id_district').append($('<option>', {
+                        value: item_district,
+                        text: item_district,
+                    }, '</option>'));
+                });
+            }
+            $('#id_ward').append($('<option>', {
+                value: '0',
+                text: 'Chọn Phường/Xã',
+            }, '</option>'));
+        });
+
+        $('#id_district').change(function(){
+            var s = $(this).val();
+            if(s == '0'){
+                $('#id_ward').empty();
+                $('#id_ward').append($('<option>', {
+                    value: '0',
+                    text: 'Chọn Phường/Xã',
+                }, '</option>'));
+            }
+            var ward_arr = w_a[s].split("|");
+            $('#id_ward').empty();
+            $('#id_ward').append($('<option>', {
+                    value: '0',
+                    text: 'Chọn Phường/Xã',
+                }, '</option>'));
+            $.each(ward_arr, function (j, item_ward) {
+                $('#id_ward').append($('<option>', {
+                    value: item_ward,
+                    text: item_ward,
+                }, '</option>'));
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% extends '_Master.html' %}
+{% block title_tab %}Giỏ hàng{% endblock %}
+{% load humanize %}
+        
+{% block main_content %}
+    <!-- Breadcrumb Start -->
+    <div class="breadcrumb-wrap">
+        <div class="container-fluid">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'app_store:trang_chu' %}">Trang chủ</a></li>
+                <li class="breadcrumb-item active">Giỏ hàng</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+    
+    <!-- Cart Start -->
+    <div class="cart-page">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="cart-page-inner">
+                        {% if cart|length > 0 %}
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>STT</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Đơn giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Thành tiền</th>
+                                            <th>Xóa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="align-middle">
+                                        {% for c in cart %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>
+                                                <div class="img">
+                                                    <a href="{% url 'app_store:san_pham' c.product.pk %}">
+                                                        <img src="{{ c.product.image.url }}" alt="{{ c.product }}">
+                                                    </a>
+                                                    <p>
+                                                        <a href="{% url 'app_store:san_pham' c.product.pk %}">
+                                                            {{ c.product }}
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                            <td>{{ c.price|floatformat:0|intcomma }}</td>
+                                            <td>
+                                                <div class="qty">
+                                                    <button class="btn-minus" id="btn-minus-{{ c.product.pk }}"><i class="fa fa-minus"></i></button>
+                                                    <input type="text" value="{{ c.quantity }}" name="quantity_1_{{ c.product.pk }}" 
+                                                                                                id="quantity_1_{{ c.product.pk }}">
+                                                    <button class="btn-plus" id="btn-plus-{{ c.product.pk }}"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </td>
+                                            <td>{{ c.total_price|floatformat:0|intcomma }}</td>
+                                            <td>
+                                                <button data-toggle="modal" data-target="#sp{{c.product.pk}}">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="sp{{c.product.pk}}" tabindex="-1" aria-labelledby="xoa_san_pham" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="xoa_san_pham">Xóa khỏi giỏ hàng?</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Bạn có đồng ý xóa sản phẩm <b>"{{ c.product }}"</b> khỏi giỏ hàng không? 
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form method="post" action="{% url 'app_cart:xoa_san_pham' c.product.pk %}">
+                                                            {% csrf_token %}
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Bỏ qua</button>
+                                                            <button type="submit" class="btn btn-primary">Đồng ý</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p> Không có sản phẩm trong giỏ hàng </p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart-page-inner">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="cart-summary">
+                                        <div class="cart-content">
+                                            <h1>Thông tin đơn hàng</h1>
+                                            <p>Tạm tính<span>{{ cart.get_total_price|floatformat:0|intcomma }} đ</span></p>
+                                            <p>Giảm giá<span>{{ cart.get_discount|floatformat:0|intcomma }} đ</span></p>
+                                            <p>Phí giao hàng<span>0 đ</span></p>
+                                            <h2>Tổng thành tiền<span>{{ cart.get_final_total_price|floatformat:0|intcomma }} đ</span></h2>
+                                        </div>
+                                        <div class="cart-btn">
+                                            <button type="submit" name="btnCapNhatGioHang" value="Cập nhật giỏ hàng">Cập nhật giỏ hàng</button><button type="button" onclick="window.location.href='{% url 'app_cart:thanh_toan' %}'">Thanh toán</button>
+                                            {% for c in cart %}
+                                                <input type="hidden" value="{{ c.quantity }}" name="quantity_2_{{ c.product.pk }}"
+                                                                                            id="quantity_2_{{ c.product.pk }}" />
+                                                <script>
+                                                    $(document).ready(function () {
+                                                        $("#quantity_1_{{ c.product.pk }}").change(function () {
+                                                            let so_luong = $("#quantity_1_{{ c.product.pk }}").val();
+                                                            $("#quantity_2_{{ c.product.pk }}").val(so_luong);
+                                                        });
+                                                    });
+
+                                                    $(document).ready(function () {
+                                                        $("#btn-minus-{{ c.product.pk }}").click(function () {
+                                                            let so_luong = $("#quantity_1_{{ c.product.pk }}").val();
+                                                            $("#quantity_2_{{ c.product.pk }}").val(so_luong);
+                                                        });
+                                                    });
+
+                                                    $(document).ready(function () {
+                                                        $("#btn-plus-{{ c.product.pk }}").click(function () {
+                                                            let so_luong = $("#quantity_1_{{ c.product.pk }}").val();
+                                                            $("#quantity_2_{{ c.product.pk }}").val(so_luong);
+                                                        });
+                                                    });
+                                                </script>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cart End -->
+ {% endblock %}

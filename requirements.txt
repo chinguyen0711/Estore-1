@@ -1,0 +1,17 @@
+django
+django-ckeditor
+django-mathfilters
+Pillow
+bcrypt
+django[argon2]
+#scrypt
+djangorestframework
+pdfkit
+mlxtend
+pandas
+numpy
+openpyxl
+humanize
+feedparser
+matplotlib
+seaborn

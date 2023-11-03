@@ -1,0 +1,41 @@
+{% extends "_Master2.html" %}
+
+{% block main_content %}
+<div class="mt-5">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Username</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Status</th>
+                <th scope="col">              </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in ds_user %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.is_active %}
+                        <span class="badge rounded-pill text-bg-success">Active</span>
+                    {% else %}
+                        <span class="badge rounded-pill text-bg-danger">Deactive</span>
+                    {% endif %}
+              
+                </td>
+                <td style="width: 20%;">
+                    <button type="button" class="btn btn-secondary btn-sm">Chi tiết</button><button type="button" class="btn btn-danger btn-sm">Xóa</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

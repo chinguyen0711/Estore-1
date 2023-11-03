@@ -1,0 +1,77 @@
+{% extends "_Master2.html" %}
+
+{% block main_content %}
+<form method="post">
+    {% csrf_token %} 
+    <div class="mt-5">
+        {{ chuoi_ket_qua|safe }}
+        
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_user.username.label }}</label>
+            <div class="col-md-10">
+                {{ form_user.username }}
+            </div>
+        </div>
+        
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_user.email.label }}</label>
+            <div class="col-md-10">
+                {{ form_user.email }}
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_user.password.label }}</label>
+            <div class="col-md-10">
+                {{ form_user.password }}
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_user.confirm_password.label }}</label>
+            <div class="col-md-10">
+                {{ form_user.confirm_password }}
+            </div>
+        </div>
+
+        
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_user.first_name.label }}</label>
+            <div class="col-md-10">
+                {{ form_user.first_name }}
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_user.last_name.label }}</label>
+            <div class="col-md-10">
+                {{ form_user.last_name }}
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_profile.porfolio.label }}</label>
+            <div class="col-md-10">
+                {{ form_profile.porfolio }}
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">{{ form_profile.image.label }}</label>
+            <div class="col-md-10">
+                {{ form_profile.image }}
+            </div>
+        </div>
+
+        
+
+        <div class="mb-3 row">
+            <label class="col-md-2 col-form-label">  </label>
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-primary"  name='btnDangKy' value="Đăng Ký"> Đăng ký </button>
+                <button type="button" class="btn btn-danger"> Hủy bỏ  </button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
