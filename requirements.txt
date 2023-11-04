@@ -6,7 +6,7 @@ bcrypt
 django[argon2]
 #scrypt
 djangorestframework
-pdfkit
+#pdfkit
 mlxtend
 #pandas
 numpy
