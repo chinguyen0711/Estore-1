@@ -6,12 +6,12 @@ bcrypt
 django[argon2]
 #scrypt
 djangorestframework
-#pdfkit
+pdfkit
 mlxtend
-#pandas
+pandas
 numpy
-#openpyxl
+openpyxl
 humanize
 feedparser
-#matplotlib
-#seaborn
+matplotlib
+seaborn
